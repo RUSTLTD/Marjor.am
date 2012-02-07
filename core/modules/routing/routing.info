@@ -1,16 +1,9 @@
-**Core
-module director - running modules 
-module managment - install/uninstall, enable/disable 
-network - accept messages and send them out 
-security - encryption and such
-Authentication - 
-Dashboard - 
-database - 
-
-
-
-**Not Core
- Highscore
-analytics 
-user info (location, player name, icon)
-chat
+{
+    "name" : "routing",
+    "system version" : "0",
+    "major version" : "0",
+    "minor version" : "0",
+    "description" : "Routing passes data to and from the leaf nodes.",
+    "requirements" : [
+    ],
+}

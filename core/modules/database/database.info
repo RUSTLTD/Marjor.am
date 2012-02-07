@@ -1,0 +1,9 @@
+{
+    "name" : "database",
+    "system version" : "0",
+    "major version" : "0",
+    "minor version" : "0",
+    "description" : "database handles all database access for marjor.am. It provides a database independent interface for all other modules and leaves.",
+    "requirements" : [
+    ],
+}

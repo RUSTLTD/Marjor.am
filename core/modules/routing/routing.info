@@ -1,0 +1,16 @@
+**Core
+module director - running modules 
+module managment - install/uninstall, enable/disable 
+network - accept messages and send them out 
+security - encryption and such
+Authentication - 
+Dashboard - 
+database - 
+
+
+
+**Not Core
+ Highscore
+analytics 
+user info (location, player name, icon)
+chat

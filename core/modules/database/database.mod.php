@@ -24,9 +24,12 @@
                 || !isset($DB_array['core'])
             ){
                 Logger::error('DATABASE_MISSINGDB','No database connections available.');
+                return false;
             }
             
             $DBO_dir = (is_defined(ABSOLUTE_DIR)?ABSOLUTE_DIR:'.').'/DBO';
+            
+            require_once($DBO_dir.'/base.php');
             
             foreach($DB_array as $db_name=>$DB){
                 if(!isset($DB['type']) || $DB['type']==''){
@@ -44,11 +47,22 @@
                 ){
                     require_once($file);
                     self::databases[$db_name] = new $DB['type']($DB['host'],$DB['username'],$DB['password']);
+                }else{
+                    Logger::error('DATABASE_MISSINGINFO','Database config, "'.$db_name.'" missing connection info.');
+                    return false;
                 }
             }
+            return true;
         }
         
-      private static function delegate($function, $db, $args = null){
+        public static function close(){
+            foreach(self::databases as $DB){
+                $DB->Close();
+            }
+            return true;
+        }
+        
+        private static function delegate($function, $db, $args = null){
             if(!isset($args)){
                 $args = $db;
                 $db = 'core';
@@ -71,6 +85,14 @@
         
         public function update($db,$args = null){
             return self::delegate('update',$db,$args);
+        }
+        
+        public function create_table($db,$args = null){
+            return self::delegate('create_table',$db,$args);
+        }
+        
+        public function query($db,$args = null){
+            return self::delegate('query',$db,$args);
         }
         
     }

@@ -32,7 +32,7 @@
                     'from'=>'localization',
                     'where'=>array(
                         'language'=>LANGUAGE,
-                        'text'=>DB::escape($string)
+                        'text'=>$string
                     ),
                     'limit'=>1
                 )

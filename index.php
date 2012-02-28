@@ -43,9 +43,9 @@
  Logger::init();
  Database::init();
  Localization::init();
- //Network::init();
- //Security::init();
+ Security::init();
  //Authentication::init();
+ Network::init();
  //Routing::init();
  
  ?>

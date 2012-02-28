@@ -15,8 +15,9 @@ class DBO{
    private $pass;
    private $connection;
    
-   public function __construct($host,$user,$pass){
+   public function __construct($host,$database,$user,$pass){
         $this->host = $host;
+        $this->database = $database;
         $this->user = $user;
         $this->pass = $pass;
         return true;
@@ -26,7 +27,7 @@ class DBO{
         return true;
    }
    
-   public function query($args){
+   public function query($sql){
         return true;
    }
    

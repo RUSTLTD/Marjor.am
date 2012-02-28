@@ -41,12 +41,13 @@
                 }
                 
                 if(
-                    file_exists($file = $DBO_dir.'/'.$DB['type'].'.php') //There is a file named {DATABASE_TYPE}_dbo.php
+                    file_exists($file = $DBO_dir.'/'.$DB['type'].'.php')
                     && isset($DB['user'])
                     && isset($DB['password'])
+                    && isset($DB['database'])
                 ){
                     require_once($file);
-                    self::databases[$db_name] = new $DB['type']($DB['host'],$DB['username'],$DB['password']);
+                    self::databases[$db_name] = new $DB['type']($DB['host'],$DB['database'],$DB['username'],$DB['password']);
                 }else{
                     Logger::error('DATABASE_MISSINGINFO','Database config, "'.$db_name.'" missing connection info.');
                     return false;

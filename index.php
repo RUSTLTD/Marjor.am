@@ -1,4 +1,4 @@
-<? php
+<?php
 /**
  * Responsible for executing the main Marjoram state loop
  *
@@ -6,7 +6,7 @@
  *
  */
  
- require_once('config.php');
+ require_once('./core/config.php');
  
  
  ?>

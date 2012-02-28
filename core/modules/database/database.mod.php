@@ -17,7 +17,6 @@
         }
 
         public static function init(){
-            $databases = array();
             if(
                 !is_defined('DATABASE_CONNECTIONS')
                 || !DATABASE_CONNECTIONS
@@ -48,18 +47,17 @@
                     && isset($DB['database'])
                 ){
                     require_once($file);
-                    $databases[$db_name] = new $DB['type']($DB['host'],$DB['database'],$DB['username'],$DB['password']);
+                    self::$databases[$db_name] = new $DB['type']($DB['host'],$DB['database'],$DB['username'],$DB['password']);
                 }else{
                     Logger::error('DATABASE_MISSINGINFO','Database config, "'.$db_name.'" missing connection info.');
                     return false;
                 }
             }
-            self::databases = $databases;
             return true;
         }
         
         public static function close(){
-            foreach(self::databases as $DB){
+            foreach(self::$databases as $DB){
                 $DB->Close();
             }
             return true;
@@ -70,7 +68,7 @@
                 $args = $db;
                 $db = 'core';
             }
-            $this_db = self::databases[$db];
+            $this_db = self::$databases[$db];
             return $this_db->$function($args);
         }
         

@@ -23,6 +23,10 @@ class DBO{
         return true;
    }
    
+   public function escape($string){
+        return $string;
+   }
+   
    public function connect(){
         return true;
    }
@@ -40,10 +44,6 @@ class DBO{
    }
    
    public function delete($args){
-        return true;
-   }
-   
-   public function update($args){
         return true;
    }
    

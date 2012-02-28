@@ -16,4 +16,5 @@
  );
  
  define('DATABASE_CONNECTIONS',serialize($DB_Config));
+ 
 ?>

@@ -14,7 +14,7 @@
         }
 
         public static function init(){
-            if(!is_defined('LANGUAGE') || !LANGUAGE){
+            if(!defined('LANGUAGE') || !LANGUAGE){
                 define('LANGUAGE','en');
             }
         }

@@ -12,6 +12,8 @@
  define('CORE_DIR','./core');
  define('MOD_DIR',CORE_DIR.'/modules');
  define('CLASS_DIR',CORE_DIR.'/classes');
+ define('ABSOLUTE_DIR',getcwd());
+ 
  require_once(CORE_DIR.'/config.php');
  /*
  if($handle = opendir(MOD_DIR)){
@@ -41,9 +43,9 @@
  Logger::init();
  Database::init();
  Localization::init();
- Network::init();
- Security::init();
- Authentication::init();
- Routing::init();
+ //Network::init();
+ //Security::init();
+ //Authentication::init();
+ //Routing::init();
  
  ?>

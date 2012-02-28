@@ -18,7 +18,7 @@
 
         public static function init(){
             if(
-                !is_defined('DATABASE_CONNECTIONS')
+                !defined('DATABASE_CONNECTIONS')
                 || !DATABASE_CONNECTIONS
                 || !is_array($DB_array = unserialize(DATABASE_CONNECTIONS))
                 || !isset($DB_array['core'])
@@ -27,7 +27,8 @@
                 return false;
             }
             
-            $DBO_dir = (is_defined(ABSOLUTE_DIR)?ABSOLUTE_DIR:'.').'/DBO';
+            $DBO_dir = (defined('ABSOLUTE_DIR')?ABSOLUTE_DIR.'/core/modules/database':'.').'/DBO';
+            //die(ABSOLUTE_DIR);
             
             require_once($DBO_dir.'/base.php');
             

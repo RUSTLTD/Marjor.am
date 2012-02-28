@@ -12,11 +12,11 @@
         
         private static $databases = array();
     
-        public static install(){
+        public static function install(){
 
         }
 
-        public static init(){
+        public static function init(){
             if(
                 !is_defined('DATABASE_CONNECTIONS')
                 || !DATABASE_CONNECTIONS

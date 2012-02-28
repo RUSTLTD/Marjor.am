@@ -9,17 +9,17 @@
 	
 	
     class Localization extends module{
-        public static install(){
+        public static function install(){
 
         }
 
-        public static init(){
+        public static function init(){
             if(!is_defined('LANGUAGE') || !LANGUAGE){
                 define('LANGUAGE','en');
             }
         }
 
-        public static translate($string){
+        public static function translate($string){
 
             /* 
 			If we find a line in the localization database for the given

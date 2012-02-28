@@ -1,4 +1,4 @@
-<? php
+<?php
 /**
  * The error handler for Marjoram.
  *
@@ -9,23 +9,23 @@
  
  class logger extends module {
  
-    public static install() {
+    public static function install() {
     
     }
     
-    private static log($type, $message) {
+    private static function log($type, $message) {
     
     }
     
-    public static normal($message) {
+    public static function normal($message) {
     
     }
     
-    public static warning($message) {
+    public static function warning($message) {
     
     }
     
-    public static error($message) {
+    public static function error($message) {
     
     }
     

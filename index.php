@@ -5,6 +5,9 @@
  * @license    Modified BSD License (see LICENSE file)
  *
  */
+ //error reporting.
+ ini_set('display_errors','On');
+ error_reporting(E_ALL | E_STRICT);
  
  define('CORE_DIR','./core');
  define('MOD_DIR',CORE_DIR.'/modules');
@@ -37,7 +40,7 @@
  //init modules
  Logger::init();
  Database::init();
- Localization::();
+ Localization::init();
  Network::init();
  Security::init();
  Authentication::init();

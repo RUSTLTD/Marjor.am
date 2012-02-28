@@ -9,11 +9,6 @@
 
 
 class MYSQL extends DBO{
-   private $database;
-   private $host;
-   private $user;
-   private $pass;
-   private $connection;
    
    public function connect(){
         for($try = 1; $try<=(is_defined('NUMBER_DATABASE_TRIES_BEFORE_FAIL') && NUMBER_DATABASE_TRIES_BEFORE_FAIL!='')?NUMBER_DATABASE_TRIES_BEFORE_FAIL:3; $try++){
@@ -26,7 +21,7 @@ class MYSQL extends DBO{
         return false;
    }
    
-   public function query($args){
+   public function query($sql){
         if((!isset($this->connection) || !$this->connection) && !$this->connect()){
             return false;
         }
@@ -34,27 +29,39 @@ class MYSQL extends DBO{
    }
    
    public function save($args){
-        return true;
+        $sql = '';
+        
+        return $this->query($sql);
    }
    
    public function find($args){
-        return true;
+        $sql = '';
+        
+        return $this->query($sql);
    }
    
    public function delete($args){
-        return true;
+        $sql = '';
+        
+        return $this->query($sql);
    }
    
    public function update($args){
-        return true;
+        $sql = '';
+        
+        return $this->query($sql);
    }
    
    public function create_table($args){
-        return true;
+        $sql = '';
+        
+        return $this->query($sql);
    }
    
    public function close(){
-        return true;
+        $sql = '';
+        
+        return $this->query($sql);
    }
    
 }

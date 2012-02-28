@@ -9,18 +9,36 @@
 
 
 class MYSQL extends DBO{
+    public function __construct($host,$database,$user,$pass){
+        $this->host = $host;
+        $this->database = $database;
+        $this->user = $user;
+        $this->pass = $pass;
+        return true;
+    }
    
    public function connect(){
         if(!isset($this->connection) || !$this->connection){
-            for($try = 1; $try<=(is_defined('NUMBER_DATABASE_TRIES_BEFORE_FAIL') && NUMBER_DATABASE_TRIES_BEFORE_FAIL!='')?NUMBER_DATABASE_TRIES_BEFORE_FAIL:3; $try++){
+            $max_tries = 3;
+            
+            if(defined('NUMBER_DATABASE_TRIES_BEFORE_FAIL') && NUMBER_DATABASE_TRIES_BEFORE_FAIL!=''){
+                $max_tries = (int)NUMBER_DATABASE_TRIES_BEFORE_FAIL;
+            }
+            
+            for($try = 1; $try<=$max_tries; $try++){
                 $this->connection = mysql_connect($this->host, $this->user, $this->pass);
                 if($this->connection!==false){
-                    return true;
+                    break;
                 }
             }
-            Logger::error('MYSQLDBO_CONNECTIONFAIL','Connection to database, "'.$this->database.'" failed after '.$try.' tries. ('.mysql_error().')');
-            return false;
+            
+            if($this->connection===false){
+                Logger::error('MYSQLDBO_CONNECTIONFAIL','Connection to database, "'.$this->database.'" failed after '.$try.' tries. ('.mysql_error().')');
+                return false;
+            }
         }
+        
+        mysql_select_db($this->database);
         return true;
    }
    
@@ -35,15 +53,22 @@ class MYSQL extends DBO{
         if($this->connect()===false){
             return false;
         }
-        $sql_obj = mysql_query($sql_obj,$this->connection);
-        return mysql_fetch_array($sql_obj,'MYSQL_ASSOC');
+        $sql_obj = mysql_query($sql,$this->connection);
+        if($sql_obj === false){
+            die(mysql_error());
+            Logger::error('MYSQLDBO_QUERYERROR','Invalid query. ('.mysql_error().')');
+            return false;
+        }
+        return mysql_fetch_array($sql_obj,MYSQL_ASSOC);
    }
    
    public function save($args){
         $sql = '';
         
-        $primary_key = $this->query('SHOW KEYS FROM table WHERE Key_name = "PRIMARY"');
-        die(print_r($primary_key));
+        $primary_key = $this->query('SHOW KEYS FROM `table` WHERE Key_name = "PRIMARY"');
+        if(is_array($primary_key) && isset($primary_key['Column_name'])){
+            $p_key = $primary_key['Column_name'];
+        }
         
         return $this->query($sql);
    }

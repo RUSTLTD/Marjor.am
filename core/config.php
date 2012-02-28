@@ -11,10 +11,12 @@
     'core' => array(
         'type' => 'mysql',
         'host' => 'localhost',
+        'user' => 'user',
+        'password' => 'password',
         'database' => 'marjoram'
     )
  );
  
  define('DATABASE_CONNECTIONS',serialize($DB_Config));
- 
+ define('NUMBER_DATABASE_TRIES_BEFORE_FAIL',10);
 ?>

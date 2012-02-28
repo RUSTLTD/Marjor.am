@@ -26,7 +26,6 @@
                 Logger::error('DATABASE_MISSINGDB','No database connections available.');
                 return false;
             }
-            
             $DBO_dir = (defined('ABSOLUTE_DIR')?ABSOLUTE_DIR.'/core/modules/database':'.').'/DBO';
             //die(ABSOLUTE_DIR);
             
@@ -48,7 +47,7 @@
                     && isset($DB['database'])
                 ){
                     require_once($file);
-                    self::$databases[$db_name] = new $DB['type']($DB['host'],$DB['database'],$DB['username'],$DB['password']);
+                    self::$databases[$db_name] = new $DB['type']($DB['host'],$DB['database'],$DB['user'],$DB['password']);
                 }else{
                     Logger::error('DATABASE_MISSINGINFO','Database config, "'.$db_name.'" missing connection info.');
                     return false;
@@ -73,27 +72,27 @@
             return $this_db->$function($args);
         }
         
-        public function save($db,$args = null){
+        public static function save($db,$args = null){
             return self::delegate('save',$db,$args);
         }
         
-        public function find($db,$args = null){
+        public static function find($db,$args = null){
             return self::delegate('find',$db,$args);
         }
         
-        public function delete($db,$args = null){
+        public static function delete($db,$args = null){
             return self::delegate('delete',$db,$args);
         }
         
-        public function update($db,$args = null){
+        public static function update($db,$args = null){
             return self::delegate('update',$db,$args);
         }
         
-        public function create_table($db,$args = null){
+        public static function create_table($db,$args = null){
             return self::delegate('create_table',$db,$args);
         }
         
-        public function query($db,$args = null){
+        public static function query($db,$args = null){
             return self::delegate('query',$db,$args);
         }
         

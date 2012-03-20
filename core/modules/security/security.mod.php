@@ -13,6 +13,12 @@ class Security extends module{
     private static $rsa_key;
     
     public static function install() {
+        /* @TODO
+		 * Set up Database
+		 * Prompt for entropy
+		 * Generate RSA Key
+		 * Populate Database
+		 */	
         return true;
     }
     

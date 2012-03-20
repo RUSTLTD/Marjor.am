@@ -32,7 +32,7 @@ class Network extends module{
             if(isset($_POST['sid'])) {
                 
             } else {
-                Logger::error('NETWORK_MISSINGUID', 'Non-authentication request requires uid.');
+                Logger::error('NETWORK_MISSINGUID', 'Non-authentication request requires sid.');
             }
         }
         return true;

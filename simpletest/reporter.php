@@ -75,9 +75,9 @@ class HtmlReporter extends SimpleReporter {
      *    @access protected
      */
     protected function getCss() {
-        return ".fail { background-color: inherit; color: red; }" .
-                ".pass { background-color: inherit; color: green; }" .
-                " pre { background-color: lightgray; color: inherit; }";
+        return ".fail { float:left; clear: left; background-color: inherit; color: red; margin-right: 4px; }" .
+                ".pass { float:left; clear: left; background-color: inherit; color: green; margin-right: 4px; }" .
+                " pre { float:left; clear: left; background-color: lightgray; color: inherit; margin-right: 4px; }";
     }
 
     /**

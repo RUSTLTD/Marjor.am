@@ -74,12 +74,14 @@ class MYSQL extends DBO{
    }
    
    public function find($args){
-        if(!isset($args['from'])){
+        if(!isset($args['from']) && ((is_array($args['from']) && count($args['from'])>0) || is_string($args['from']))){
             Logger::error('MYSQLDBO_MISSINGFROM','Missing \'from\' attribute in find() query!');
             return false;
         }
         
-        $sql = 'SELECT '.(isset($args['fields'])?('`'.implode('`,`',$args['fields']).'`'):'*').' FROM `'.implode('`, `',$args['from']).'`';
+        $fields = ((isset($args['fields']) && is_array($args['fields']) && count($args['fields'])>0)?('`'.implode('`,`',$args['fields']).'`'):((is_string($args['fields']))?'`'.$args['fields'].'`':'*'));
+        $from = (is_array($args['from'])?implode('`, `',$args['from']):(string)$args['from']);
+        $sql = 'SELECT '.$fields.' FROM `'.$from.'`';
         
         if(isset($args['where']) && is_array($args['where']) && count($args['where']) > 0){
             $sql .= ' WHERE ';

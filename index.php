@@ -15,6 +15,9 @@
  define('ABSOLUTE_DIR',getcwd());
  
  require_once(CORE_DIR.'/config.php');
+ 
+ 
+ define('STATE','normal');
  /*
  if($handle = opendir(MOD_DIR)){
     while(($filename = readdir($handle)) !== false){

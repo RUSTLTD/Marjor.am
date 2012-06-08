@@ -1,0 +1,108 @@
+html, body{
+    padding: 0px;
+    margin: 0px;
+}
+
+body{
+    background: url(../graphics/background.png);
+    font-family: Verdana,Geneva,"DejaVu Sans",sans-serif;
+    line-height: 1.5;
+}
+
+header, footer{
+    background: rgba(0,0,0,.75);
+    color: #fff;
+}
+
+h1,h2,h3,h4,h5,h6,h7,h8{
+    margin: 0px;
+    padding: 0px;
+}
+
+h1{
+    font-size: 1.75em;
+    line-height: 1;
+}
+
+h2{
+    font-size: 1.25em;
+    line-height: 1;
+}
+
+h3{
+    font-size: 1em;
+    line-height: 1;
+}
+footer{
+    font-size: .75em;
+    text-align: center;
+}
+header{
+    background-image: url(../graphics/logo.png);
+    background-position: 0px center;
+    background-repeat: no-repeat;
+    min-height: 48px;
+    padding-left: 210px;
+}
+header h1{
+    padding: 10px;
+    font-size: 1.5em;
+}
+
+.clearfix:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+
+#main{
+    margin: 25px;
+    padding: 25px;
+    border: 5px solid #92B35D;
+    -webkit-border-radius: 50px;
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius: 50px;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-radius: 50px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background: rgba(255,255,255,.9);
+}
+.info{
+    border: 2px solid rgba(146,179,93,.5);
+    min-height: 50px;
+    background: rgba(146,179,93,.25) url(../graphics/info.png) 10px center no-repeat;;
+    color: #000;
+    padding: 10px;
+    padding-left: 70px;
+    margin-bottom: 25px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+fieldset{
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+legend{
+    font-size: 1.25em;
+    padding: 5px;
+    margin: 0px;
+    background-color: #92B35D;
+    color: #fff;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+}

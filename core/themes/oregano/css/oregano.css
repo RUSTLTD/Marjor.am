@@ -62,6 +62,7 @@ header h1{
     visibility: hidden;
 }
 
+
 #main{
     margin: 25px;
     padding: 25px;
@@ -80,7 +81,7 @@ header h1{
 .info{
     border: 2px solid rgba(146,179,93,.5);
     min-height: 50px;
-    background: rgba(146,179,93,.25) url(../graphics/info.png) 10px center no-repeat;;
+    background: rgba(146,179,93,.25) url(../graphics/info.png) 10px center no-repeat;
     color: #000;
     padding: 10px;
     padding-left: 70px;
@@ -89,12 +90,20 @@ header h1{
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
+.success{
+    background: rgba(146,179,93,.25) url(../graphics/success.png) 10px center no-repeat;
+}
+.error{
+    border: 2px solid rgba(166,107,107,.25);
+    background: rgba(166,107,107,.25) url(../graphics/error.png) 10px center no-repeat;
+}
 fieldset{
     margin: 0px;
     padding: 0px;
     border: 0px;
+    padding-top: 2px;
 }
-legend{
+legend, .submit input{
     font-size: 1.25em;
     padding: 5px;
     margin: 0px;
@@ -105,4 +114,63 @@ legend{
     border-radius: 5px;
     display: block;
     width: 100%;
+}
+.input, .input input, .input select, .input textarea{
+    font-size: 1.125em;
+    display: block;
+    width: 100%;
+}
+.input input, .input select, .input textarea{
+    padding: 0px;
+    margin-top: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+.input{
+    padding: 5px;
+    margin-bottom: 2px;
+    background-color: rgba(200,200,200,.125);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+.input:nth-child(odd){
+    background-color: rgba(146,179,93,.125);
+}
+.input label{
+    width: 100%;
+    display: block;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: rgba(146,179,93,.125);
+}
+.input label em{
+    color: rgba(0,0,0,.75);
+}
+div.submit:nth-child(odd),div.submit:nth-child(even){
+    background-color: transparent;
+}
+.submit input{
+    width: 200px;
+    text-align: center;
+    border: 0px;
+    cursor: pointer;
+}
+.clearfix:after{
+    content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+.clearfix{
+    display: inline-block;
+}
+.left{
+    float: left;
+}
+.right{
+    float: right;
 }

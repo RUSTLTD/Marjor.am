@@ -7,6 +7,20 @@
  */
  
  // Database Configuration: Edit the "core" array to point to your Marjor.am database
+ 
+ /* Default values:
+    ------------------------
+    $DB_Config = array(
+        'core' => array(
+            'type' => 'mysql',
+            'host' => 'localhost',
+            'user' => 'user',
+            'password' => 'password',
+            'database' => 'marjoram'
+        )
+    );
+ */
+ 
  $DB_Config = array(
     'core' => array(
         'type' => 'mysql',

@@ -26,7 +26,7 @@ class MYSQL extends DBO{
             }
             
             for($try = 1; $try<=$max_tries; $try++){
-                $this->connection = mysql_connect($this->host, $this->user, $this->pass);
+                $this->connection = @mysql_connect($this->host, $this->user, $this->pass);
                 if($this->connection!==false){
                     break;
                 }

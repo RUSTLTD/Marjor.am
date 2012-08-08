@@ -81,7 +81,7 @@ header h1{
 .info{
     border: 2px solid rgba(146,179,93,.5);
     min-height: 50px;
-    background: rgba(146,179,93,.25) url(../graphics/info.png) 10px center no-repeat;
+    background: rgba(245,179,93,.25) url(../graphics/info.png) 10px center no-repeat;
     color: #000;
     padding: 10px;
     padding-left: 70px;
@@ -91,12 +91,19 @@ header h1{
     border-radius: 5px;
 }
 .success{
-    background: rgba(146,179,93,.25) url(../graphics/success.png) 10px center no-repeat;
+    background: rgba(146,179,93,.25);
 }
 .error{
-    border: 2px solid rgba(166,107,107,.25);
-    background: rgba(166,107,107,.25) url(../graphics/error.png) 10px center no-repeat;
+    border: 2px solid rgba(240,60,60,.25);
+    background: rgba(240,60,60,.5);
 }
+#setup_info.success{
+    background: rgba(146,179,93,.25) url(../graphics/success.png) 10px center no-repeat;
+}
+#setup_info.error{
+    background: rgba(240,60,60,.25) url(../graphics/error.png) 10px center no-repeat;
+}
+
 fieldset{
     margin: 0px;
     padding: 0px;
@@ -144,6 +151,17 @@ legend, .submit input{
     -moz-border-radius: 5px;
     border-radius: 5px;
     background-color: rgba(146,179,93,.125);
+}
+
+.error label{
+    background: rgba(240,60,60,.5);
+}
+label .error{
+    color: #fff;
+    background: rgba(240,60,60,.75);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 .input label em{
     color: rgba(0,0,0,.75);

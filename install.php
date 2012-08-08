@@ -39,7 +39,11 @@
 */
 
     //grab installer array
-    $install_array = isset($_POST['install'])?unserialize(urldecode($_POST['install'])):install_get_default_install_array();
+    $install_array = isset($_POST['install'])?$_POST+unserialize(urldecode($_POST['install'])):install_get_default_install_array();
+    
+    if(isset($install_array['install'])){
+        unset($install_array['install']);
+    }
     
     $current_function = 'install_'.$install_array['state'];
     
@@ -79,23 +83,99 @@
         //Basically, we just want to ask the user for the DB config stuff here.
         return array(
             'title'=>'Database Configuration',
-            'description'=>($db_set_up?
+            'description'=>isset($install_array['message'])?$install_array['message']:($db_set_up?
                                 'Howdy! It appears that you already have your database configured. If the following values are correct, simply click "next." Else, alter the values to match your current database setup, and then click "next."':
                                 'Hey there - welcome to Marjor.am! Before we can begin the installation process, we will need to configure your database connection. If you do not have a database set up presently, please view <a href="http://marjor.am/docs/">the documentation</a> for help. Once you are all set, click "next" to continue.'),
-            'info_class'=>($db_set_up?
+            'info_class'=>isset($install_array['message_type'])?$install_array['message_type']:($db_set_up?
                                 'success':null
                           ),
             'body' => array(
-                            array('type',(isset($database)?$database['core']['type']:'mysql'),array('description'=>'Database types (otherwise known as <acronymn title="Database Management Systems">DBMS</acronymn>s), used to store data. The default (and standard option) is MySQL','type'=>'select','options'=>$DBOs)),
-                            array('host',(isset($database)?$database['core']['host']:'localhost'),array('description'=>'Server which will host your Marjor.am database. Usually "localhost," the default value.','type'=>'text')),
-                            array('user',(isset($database)?$database['core']['user']:'localhost'),array('description'=>'Username that has access to the Marjor.am database. For optimum security, ensure that this user only has access to the one database.','type'=>'text')),
-                            array('password',(isset($database)?$database['core']['password']:''),array('description'=>'Previously entered username\'s password - default is "password" - <u>PLEASE CHANGE THIS</u>.','type'=>'password')),
-                            array('database',(isset($database)?$database['core']['database']:'localhost'),array('description'=>'Marjor.am database. To ensure maximum stability, ensure that this database is used only by Marjor.am.','type'=>'text')),
+                            array('database_type',isset($install_array['database_type'])?$install_array['database_type']:((isset($database)?$database['core']['type']:'mysql')),array('description'=>'Database types (otherwise known as <acronymn title="Database Management Systems">DBMS</acronymn>s), used to store data. The default (and standard option) is MySQL','type'=>'select','options'=>$DBOs)),
+                            array('database_host',isset($install_array['database_host'])?$install_array['database_host']:((isset($database)?$database['core']['host']:'localhost')),array('description'=>'Server which will host your Marjor.am database. Usually "localhost," the default value.','type'=>'text')),
+                            array('database_user',isset($install_array['database_user'])?$install_array['database_user']:((isset($database)?$database['core']['user']:'localhost')),array('description'=>'Username that has access to the Marjor.am database. For optimum security, ensure that this user only has access to the one database.','type'=>'text')),
+                            array('database_password',isset($install_array['database_password'])?$install_array['database_password']:((isset($database)?$database['core']['password']:'password')),array('description'=>'Previously entered username\'s password - default is "password" - <u>PLEASE CHANGE THIS</u>.','type'=>'password')),
+                            array('database_name',isset($install_array['database_name'])?$install_array['database_name']:((isset($database)?$database['core']['database']:'localhost')),array('description'=>'Marjor.am database. To ensure maximum stability, ensure that this database is used only by Marjor.am.','type'=>'text')),
                       ),
         );
     }
     
-    function install_print_state($output, $install_array){
+    function install_db_validate(&$install_array){
+        //Assume this will fail. Because we are pessimists like that!
+        $install_array['state'] = 'db_setup';
+        
+        //Build list of DBOs
+        $DBOs = array();
+         if($handle = opendir(MOD_DIR.'/database/DBO')){
+            while(($filename = readdir($handle)) !== false){
+                if($filename != '.' 
+                   && $filename != '..' 
+                   && $filename != 'base.php'
+                   && strpos($filename,'.php') !== false){
+                    $dbo = str_replace('.php','',$filename);
+                    $DBOs[$dbo] = ucwords(str_replace('_',' ',$dbo));
+                }
+            }
+         }
+        
+        if(!isset($install_array['database_type']) || $install_array['database_type']=='' || !array_key_exists($install_array['database_type'],$DBOs)){
+            $install_array['errors']['database_type'] = array('Invalid Database Type','Database type must be set, and must be a valid type');
+        }
+        if(!isset($install_array['database_host']) || $install_array['database_host']=='' || ($install_array['database_host']!=='localhost' && !filter_var('http://'.$install_array['database_host'], FILTER_VALIDATE_URL) && !filter_var($install_array['database_host'], FILTER_VALIDATE_IP))){
+            $install_array['errors']['database_host'] = array('Invalid Database Host','Database host must be set, and must be either "localhost," a valid URL, or a valid IP');
+        }
+        if(!isset($install_array['database_user']) || $install_array['database_user']==''){
+            $install_array['errors']['database_user'] = array('Invalid Database Username','Database user must be set');
+        }
+        if(!isset($install_array['database_password']) || $install_array['database_password']==''){
+            $install_array['errors']['database_password'] = array('Invalid Database Password','Database password must be set');
+        }
+        if(!isset($install_array['database_name']) || $install_array['database_name']==''){
+            $install_array['errors']['database_name'] = array('Invalid Database Name','Database name must be set');
+        }
+        
+        if(!isset($install_array['errors']) || count($install_array['errors']) == 0){
+            //Try connecting!
+            $DBO_dir = (defined('ABSOLUTE_DIR')?ABSOLUTE_DIR.'/core/modules/database':'.').'/DBO';
+            require_once($DBO_dir.'/base.php');   
+
+            if(
+                file_exists($file = $DBO_dir.'/'.$install_array['database_type'].'.php')
+            ){
+                        require_once($file);
+                        $database = new $install_array['database_type']($install_array['database_host'],$install_array['database_name'],$install_array['database_user'],$install_array['database_password']);
+                        if(@$database->connect()===true){
+                        
+                            die('Yup!');
+                        }else{
+                            die('Nope!');
+                        }
+            }
+        }
+        
+        if(isset($install_array['errors']) && count($install_array['errors']) > 0){
+            $install_array['message'] = 'ERROR';
+            $install_array['message_type'] = 'error';
+        }
+        
+        return false;
+    }
+    
+    function install_print_state($output, &$install_array){
+        if($output === false){
+            //No output! Cool! Let's just go to the next function.
+            
+            //Reset the timer
+            set_time_limit(30);
+            
+            $next_function = 'install_'.$install_array['state'];
+            
+            return install_print_state($next_function($install_array),$install_array);
+        }
+        
+        
+        unset($install_array['message']);
+        unset($install_array['message_type']);
+        
         echo install_header();
         echo '
             <header>
@@ -103,7 +183,7 @@
             </header>
             <div id="main" role="main">',
                 (isset($install_array['status'])?('<div class="info '.$install_array['status']['class'].'">'.$install_array['status']['message'].'</div>'):''),
-                '<div class="info ',(isset($output['info_class'])?$output['info_class']:''),'">',$output['description'],'</div>
+                '<div id="setup_info" class="info ',(isset($output['info_class'])?$output['info_class']:''),'">',$output['description'],'</div>
                 <form id="install_form" action="install.php" method="post">
                     <fieldset form_id="install_form">
                         <legend>',$output['title'],'</legend>';
@@ -114,8 +194,16 @@
                             $field_name = ucwords(str_replace('_',' ',$body_item[0]));
                             
                             if($body_item[2]['type'] != 'hidden'){
-                                $output = '<div class="input '.$body_item[2]['type'].'">
-                                            <label for="'.$body_item[0].'">'.$field_name.' '.((isset($body_item[2]['description']))?'<small><em>'.$body_item[2]['description'].'</em></small>':'').'</label>';
+                                if(isset($install_array['errors'][$body_item[0]])){
+                                    $errored = true;
+                                }else{
+                                    $errored = false;
+                                }
+                                $output = '<div class="input '.($errored?'error ':'').$body_item[2]['type'].'">
+                                            <label for="'.$body_item[0].'">'.$field_name.' '.((isset($body_item[2]['description']))?'<small><em>'.$body_item[2]['description'].'</em></small>':'').($errored?'<br /><small class="error"><strong>'.$install_array['errors'][$body_item[0]][0].'</strong>: '.$install_array['errors'][$body_item[0]][1].'</small>':'').'</label>';
+                                if($errored){
+                                    unset($install_array['errors'][$body_item[0]]);
+                                }
                             }
                             
                             switch($body_item[2]['type']){

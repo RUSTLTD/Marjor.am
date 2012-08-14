@@ -43,12 +43,14 @@
  require_once(MOD_DIR."/routing/routing.mod.php");
  
  //init modules
- Logger::init();
- Database::init();
- Localization::init();
- Security::init();
- //Authentication::init();
- Network::init();
- //Routing::init();
+ if(   !Logger::init() 
+    || !Database::init()
+    || !Localization::init()
+    || !Security::init()
+    //|| !Authentication::init()
+    || !Network::init()
+    //|| !Routing::init()
+  ){
+  }
  
  ?>

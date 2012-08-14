@@ -144,8 +144,33 @@
                         require_once($file);
                         $database = new $install_array['database_type']($install_array['database_host'],$install_array['database_name'],$install_array['database_user'],$install_array['database_password']);
                         if(@$database->connect()===true){
-                        
-                            die('Yup!');
+                            //Got a connection - go ahead and create the table
+                            $database = $database->create_table(array(
+                                'table'=>'system',
+                                'fields'=>array(
+                                    array(
+                                        'name'=>'name',
+                                        'type'=>'varchar',
+                                        'size'=>32,
+                                        'not_null'=>true,
+                                        'unique'=>true,
+                                        'comment'=>'Name of this system variable - must be unique!'
+                                    ),
+                                    array(
+                                        'name'=>'value',
+                                        'type'=>'text',
+                                        'not_null'=>false,
+                                        'comment'=>'Name of this system variable - may be null'
+                                    ),
+                                    array(
+                                        'name'=>'module',
+                                        'type'=>'varchar',
+                                        'size'=>32,
+                                        'not_null'=>true,
+                                        'comment'=>'Module responsible for this system variable'
+                                    ),
+                                )
+                            ));
                         }else{
                             die('Nope!');
                         }

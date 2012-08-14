@@ -59,6 +59,9 @@ class MYSQL extends DBO{
             Logger::error('MYSQLDBO_QUERYERROR','Invalid query. ('.mysql_error().')');
             return false;
         }
+        if($sql_obj===true){
+            return true;
+        }
         return mysql_fetch_array($sql_obj,MYSQL_ASSOC);
    }
    
@@ -123,31 +126,48 @@ class MYSQL extends DBO{
         
         if(isset($args['fields']) && is_array($args['fields']) && count($args['fields'])>0){
             $sql .= ' (';
+            $fields_formatted = array();
             foreach($args['fields'] as $field){
+                $field_formatted = '';
                 if(!isset($field['name']) || !isset($field['type'])){
                     Logger::error('MYSQLDBO_IMPROPERFIELD','Improper field in create_table() query! [Field info: '.var_dump($field,true).']');
                     return false;
                 }
-                $sql .= "`{$field['name']}` {$field['type']}";
-                if(isset($field['auto_increment']) && $field['auto_increment']===true){
-                    $sql .= ' AUTO_INCREMENT';
+                $field_formatted .= "`{$field['name']}` {$field['type']}";
+                if(isset($field['size']) && is_numeric($field['size'])){
+                    $field_formatted .= "({$field['size']})";
                 }
-                if(isset($field['unique']) && $field['unique']===true){
-                    $sql .= ' UNIQUE';
-                }
-                if(isset($field['primary']) && $field['primary']===false){
-                    $sql .= ' PRIMARY KEY';
-                }
-                if(isset($field['comment']) && $field['comment']!=""){
-                    $sql .= ' COMMENT "'.$this->escape($field['comment']).'"';
+                if(isset($field['not_null']) && $field['not_null']===true){
+                    $field_formatted .= ' NOT NULL';
                 }
                 if(isset($field['default']) && $field['comment']!=""){
-                    $sql .= ' DEFAULT "'.$this->escape($field['default']).'"';
+                    $default = $this->escape((string)$field['default']);
+                    if(!is_numeric($default)){
+                        $default = "'$default'";
+                    }
+                    $field_formatted .= ' DEFAULT $default';
                 }
+                if(isset($field['auto_increment']) && $field['auto_increment']===true){
+                    $field_formatted .= ' AUTO_INCREMENT';
+                }
+                if(isset($field['unique']) && $field['unique']===true){
+                    $field_formatted .= ' UNIQUE';
+                }
+                if(isset($field['primary']) && $field['primary']===true){
+                    $field_formatted .= ' PRIMARY KEY';
+                }
+                if(isset($field['comment']) && $field['comment']!=""){
+                    $field_formatted .= ' COMMENT "'.$this->escape((string)$field['comment']).'"';
+                }
+                $fields_formatted[] = $field_formatted;
             }
+            
+            $sql .= implode(', ',$fields_formatted).')';
         }
         
-        
+        if(isset($args['engine'])){
+            $sql .= ' ENGINE = '.$this->escape((string)$args['engine']);
+        }
         
         return $this->query($sql);
    }
